@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getGroups } from "../api/group";
+import Pagination from "../components/Pagination";
 import Toast from "../components/Toast";
 import { formatGroupDate } from "../utils/date";
 import "./GroupList.css";
@@ -35,20 +36,6 @@ export default function GroupList() {
   useEffect(() => {
     fetchGroups();
   }, [page, region, status]);
-
-  const getPageNumbers = () => {
-    if (totalPages <= 0) return [];
-    const windowSize = 10;
-    let start = Math.max(0, page - Math.floor(windowSize / 2));
-    let end = start + windowSize;
-    if (end > totalPages) {
-      end = totalPages;
-      start = Math.max(0, end - windowSize);
-    }
-    return Array.from({ length: end - start }, (_, i) => start + i);
-  };
-
-  const pageNumbers = getPageNumbers();
 
   return (
     <div>
@@ -127,38 +114,12 @@ export default function GroupList() {
         ))}
       </div>
 
-      {totalPages > 1 && (
-        <div className="pagination">
-          <button
-            type="button"
-            className="pagination-btn"
-            disabled={page <= 0}
-            onClick={() => setPage((p) => p - 1)}
-          >
-            이전
-          </button>
-
-          {pageNumbers.map((n) => (
-            <button
-              key={n}
-              type="button"
-              className={`pagination-btn ${n === page ? "active" : ""}`}
-              onClick={() => setPage(n)}
-            >
-              {n + 1}
-            </button>
-          ))}
-
-          <button
-            type="button"
-            className="pagination-btn"
-            disabled={page >= totalPages - 1}
-            onClick={() => setPage((p) => p + 1)}
-          >
-            다음
-          </button>
-        </div>
-      )}
+      <Pagination
+        page={page}
+        totalPages={totalPages}
+        onChange={setPage}
+        onError={showToast}
+      />
 
       <Toast
         message={toast.message}
