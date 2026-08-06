@@ -186,6 +186,15 @@ export default function GroupDetail() {
     { label: "공개", value: group.isPublic === "N" ? "비공개" : "공개" },
   ];
 
+  const sortedMembers = [...acceptedMembers].sort((a, b) => {
+    if (a.userId === group.leaderId) return -1;
+    if (b.userId === group.leaderId) return 1;
+
+    const aTime = a.joinedAt ? new Date(a.joinedAt).getTime() : 0;
+    const bTime = b.joinedAt ? new Date(b.joinedAt).getTime() : 0;
+    return aTime - bTime;
+  });
+
   return (
     <div>
       <div style={{ marginBottom: 16 }}>
@@ -355,7 +364,7 @@ export default function GroupDetail() {
                   표시할 멤버가 없습니다.
                 </p>
               ) : (
-                acceptedMembers.map((m) => {
+                sortedMembers.map((m) => {
                   const isGroupLeader = m.userId === group.leaderId;
                   return (
                     <div key={m.memberId} className="member-item">

@@ -260,3 +260,88 @@ input[type='number'] {
   background: var(--bg-card);
   font-size: 14px;
 }
+
+.meta-item-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.meta-item-row .label {
+  display: block;
+}
+
+.meta-item-row .value {
+  display: block;
+}
+
+.badge {
+  flex-shrink: 0;
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid var(--border);
+}
+
+.badge-on {
+  color: var(--primary-text);
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.badge-off {
+  color: var(--text-muted);
+  background: transparent;
+}
+
+.privacy-toggle {
+  display: inline-flex;
+  width: 132px;
+  /* 고정 너비 */
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.privacy-toggle button {
+  border: none;
+  border-radius: 0;
+  padding: 6px 12px;
+  font-size: 12px;
+  background: transparent;
+  color: var(--text-muted);
+}
+
+.privacy-toggle button.active {
+  background: var(--primary);
+  color: var(--primary-text);
+}
+
+.privacy-toggle span {
+  flex: 1;
+  text-align: center;
+  padding: 6px 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: transparent;
+}
+
+.privacy-toggle span.active {
+  background: var(--primary);
+  color: var(--primary-text);
+}
+
+.field-with-privacy {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.field-with-privacy label {
+  flex: 1;
+}

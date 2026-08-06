@@ -3,10 +3,34 @@ import { useNavigate } from "react-router-dom";
 import { getMyInfo, updateMyInfo, withdraw } from "../api/user";
 import Toast from "../components/Toast";
 
+function PrivacyToggle({ value, onChange }) {
+  const toggle = () => {
+    onChange(value === "Y" ? "N" : "Y");
+  };
+
+  return (
+    <div
+      className="privacy-toggle"
+      onClick={toggle}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          toggle();
+        }
+      }}
+    >
+      <span className={value === "Y" ? "active" : ""}>공개</span>
+      <span className={value === "N" ? "active" : ""}>비공개</span>
+    </div>
+  );
+}
+
 export default function MyPage() {
   const navigate = useNavigate();
   const [info, setInfo] = useState(null);
-  const [mode, setMode] = useState("view"); // view | edit
+  const [mode, setMode] = useState("view");
   const [form, setForm] = useState({
     nickname: "",
     gender: "",
@@ -69,6 +93,16 @@ export default function MyPage() {
   const onChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const openEdit = () => {
+    setForm((prev) => ({
+      ...prev,
+      currentPassword: "",
+      newPassword: "",
+      newPasswordConfirm: "",
+    }));
+    setMode("edit");
   };
 
   const handleSubmit = async (e) => {
@@ -154,38 +188,62 @@ export default function MyPage() {
             <span className="label">아이디</span>
             <span className="value">{info.loginId}</span>
           </div>
+
           <div className="meta-item">
             <span className="label">닉네임</span>
             <span className="value">{info.nickname}</span>
           </div>
-          <div className="meta-item">
-            <span className="label">성별</span>
-            <span className="value">{info.gender || "-"}</span>
+
+          <div className="meta-item meta-item-row">
+            <div>
+              <span className="label">성별</span>
+              <span className="value">{info.gender || "-"}</span>
+            </div>
+            <span
+              className={`badge ${info.genderPublic === "Y" ? "badge-on" : "badge-off"}`}
+            >
+              {info.genderPublic === "Y" ? "공개" : "비공개"}
+            </span>
           </div>
-          <div className="meta-item">
-            <span className="label">나이</span>
-            <span className="value">{info.age ?? "-"}</span>
+
+          <div className="meta-item meta-item-row">
+            <div>
+              <span className="label">나이</span>
+              <span className="value">{info.age ?? "-"}</span>
+            </div>
+            <span
+              className={`badge ${info.agePublic === "Y" ? "badge-on" : "badge-off"}`}
+            >
+              {info.agePublic === "Y" ? "공개" : "비공개"}
+            </span>
           </div>
-          <div className="meta-item">
-            <span className="label">학력</span>
-            <span className="value">{info.education || "-"}</span>
+
+          <div className="meta-item meta-item-row">
+            <div>
+              <span className="label">학력</span>
+              <span className="value">{info.education || "-"}</span>
+            </div>
+            <span
+              className={`badge ${info.educationPublic === "Y" ? "badge-on" : "badge-off"}`}
+            >
+              {info.educationPublic === "Y" ? "공개" : "비공개"}
+            </span>
           </div>
-          <div className="meta-item">
-            <span className="label">구역</span>
-            <span className="value">{info.region || "-"}</span>
-          </div>
-          <div className="meta-item">
-            <span className="label">공개 설정</span>
-            <span className="value">
-              성별 {info.genderPublic === "Y" ? "공개" : "비공개"} · 나이{" "}
-              {info.agePublic === "Y" ? "공개" : "비공개"} · 학력{" "}
-              {info.educationPublic === "Y" ? "공개" : "비공개"} · 구역{" "}
+
+          <div className="meta-item meta-item-row">
+            <div>
+              <span className="label">구역</span>
+              <span className="value">{info.region || "-"}</span>
+            </div>
+            <span
+              className={`badge ${info.regionPublic === "Y" ? "badge-on" : "badge-off"}`}
+            >
               {info.regionPublic === "Y" ? "공개" : "비공개"}
             </span>
           </div>
 
           <div className="detail-actions" style={{ marginTop: 8 }}>
-            <button type="button" onClick={() => setMode("edit")}>
+            <button type="button" onClick={openEdit}>
               수정
             </button>
             <button
@@ -232,112 +290,101 @@ export default function MyPage() {
           />
         </label>
 
-        <label>
-          성별
-          <select name="gender" value={form.gender} onChange={onChange}>
-            <option value="">선택 안 함</option>
-            <option value="남">남</option>
-            <option value="여">여</option>
-          </select>
-        </label>
-
-        <label>
-          나이
-          <div className="age-row">
-            <button
-              type="button"
-              className="age-btn"
-              onClick={() =>
-                setForm((prev) => ({
-                  ...prev,
-                  age: String(Math.max(1, Number(prev.age || 1) - 1)),
-                }))
-              }
-            >
-              -
-            </button>
-            <input
-              type="number"
-              name="age"
-              min={1}
-              value={form.age}
-              onChange={(e) => {
-                const v = e.target.value;
-                if (v === "" || Number(v) >= 1) onChange(e);
-              }}
-            />
-            <button
-              type="button"
-              className="age-btn"
-              onClick={() =>
-                setForm((prev) => ({
-                  ...prev,
-                  age: String(Math.max(1, Number(prev.age || 0) + 1)),
-                }))
-              }
-            >
-              +
-            </button>
-          </div>
-        </label>
-
-        <label>
-          학력
-          <input name="education" value={form.education} onChange={onChange} />
-        </label>
-
-        <label>
-          구역
-          <select name="region" value={form.region} onChange={onChange}>
-            <option value="">선택 안 함</option>
-            {Array.from({ length: 26 }, (_, i) => i + 1).map((n) => (
-              <option key={n} value={`${n}구`}>
-                {n}구
-              </option>
-            ))}
-          </select>
-        </label>
-
-        <label>
-          성별 공개
-          <select
-            name="genderPublic"
+        <div className="field-with-privacy">
+          <label>
+            성별
+            <select name="gender" value={form.gender} onChange={onChange}>
+              <option value="">선택 안 함</option>
+              <option value="남">남</option>
+              <option value="여">여</option>
+            </select>
+          </label>
+          <PrivacyToggle
             value={form.genderPublic}
-            onChange={onChange}
-          >
-            <option value="Y">공개</option>
-            <option value="N">비공개</option>
-          </select>
-        </label>
-        <label>
-          나이 공개
-          <select name="agePublic" value={form.agePublic} onChange={onChange}>
-            <option value="Y">공개</option>
-            <option value="N">비공개</option>
-          </select>
-        </label>
-        <label>
-          학력 공개
-          <select
-            name="educationPublic"
+            onChange={(v) => setForm((prev) => ({ ...prev, genderPublic: v }))}
+          />
+        </div>
+
+        <div className="field-with-privacy">
+          <label>
+            나이
+            <div className="age-row">
+              <button
+                type="button"
+                className="age-btn"
+                onClick={() =>
+                  setForm((prev) => ({
+                    ...prev,
+                    age: String(Math.max(1, Number(prev.age || 1) - 1)),
+                  }))
+                }
+              >
+                -
+              </button>
+              <input
+                type="number"
+                name="age"
+                min={1}
+                value={form.age}
+                onChange={(e) => {
+                  const v = e.target.value;
+                  if (v === "" || Number(v) >= 1) onChange(e);
+                }}
+              />
+              <button
+                type="button"
+                className="age-btn"
+                onClick={() =>
+                  setForm((prev) => ({
+                    ...prev,
+                    age: String(Math.max(1, Number(prev.age || 0) + 1)),
+                  }))
+                }
+              >
+                +
+              </button>
+            </div>
+          </label>
+          <PrivacyToggle
+            value={form.agePublic}
+            onChange={(v) => setForm((prev) => ({ ...prev, agePublic: v }))}
+          />
+        </div>
+
+        <div className="field-with-privacy">
+          <label>
+            학력
+            <input
+              name="education"
+              value={form.education}
+              onChange={onChange}
+            />
+          </label>
+          <PrivacyToggle
             value={form.educationPublic}
-            onChange={onChange}
-          >
-            <option value="Y">공개</option>
-            <option value="N">비공개</option>
-          </select>
-        </label>
-        <label>
-          구역 공개
-          <select
-            name="regionPublic"
+            onChange={(v) =>
+              setForm((prev) => ({ ...prev, educationPublic: v }))
+            }
+          />
+        </div>
+
+        <div className="field-with-privacy">
+          <label>
+            구역
+            <select name="region" value={form.region} onChange={onChange}>
+              <option value="">선택 안 함</option>
+              {Array.from({ length: 26 }, (_, i) => i + 1).map((n) => (
+                <option key={n} value={`${n}구`}>
+                  {n}구
+                </option>
+              ))}
+            </select>
+          </label>
+          <PrivacyToggle
             value={form.regionPublic}
-            onChange={onChange}
-          >
-            <option value="Y">공개</option>
-            <option value="N">비공개</option>
-          </select>
-        </label>
+            onChange={(v) => setForm((prev) => ({ ...prev, regionPublic: v }))}
+          />
+        </div>
 
         <hr style={{ borderColor: "var(--border)", width: "100%" }} />
 
@@ -349,6 +396,7 @@ export default function MyPage() {
             value={form.currentPassword}
             onChange={onChange}
             required
+            autoComplete="new-password"
           />
         </label>
         <label>
@@ -358,6 +406,7 @@ export default function MyPage() {
             name="newPassword"
             value={form.newPassword}
             onChange={onChange}
+            autoComplete="new-password"
           />
         </label>
         <label>
@@ -367,6 +416,7 @@ export default function MyPage() {
             name="newPasswordConfirm"
             value={form.newPasswordConfirm}
             onChange={onChange}
+            autoComplete="new-password"
           />
         </label>
 
