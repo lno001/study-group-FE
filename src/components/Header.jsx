@@ -19,6 +19,11 @@ export default function Header() {
         padding: "12px 24px",
         borderBottom: "1px solid var(--border)",
         background: "var(--bg-card)",
+        gap: 12,
+        flexWrap: "wrap",
+        position: relative;
+        overflow: visible; /* 메뉴가 잘리지 않게 */
+        z-index: 100;
       }}
     >
       <Link
@@ -32,41 +37,44 @@ export default function Header() {
         KH 스터디
       </Link>
 
-      <nav style={{ display: "flex", gap: 16, alignItems: "center" }}>
-        <Link
-          to="/groups"
-          style={{ color: "var(--text-muted)", textDecoration: "none" }}
-        >
-          그룹 목록
+      <nav
+        style={{
+          display: "flex",
+          gap: 8,
+          alignItems: "center",
+          flexWrap: "wrap",
+        }}
+      >
+        <Link to="/groups">
+          <button type="button" className="header-btn">
+            그룹 목록
+          </button>
         </Link>
-        <Link
-          to="/groups/create"
-          style={{ color: "var(--text-muted)", textDecoration: "none" }}
-        >
-          그룹 생성
+        <Link to="/groups/create">
+          <button type="button" className="header-btn">
+            그룹 생성
+          </button>
         </Link>
         {accessToken ? (
           <>
-            <Link
-              to="/me"
-              style={{ color: "var(--text-muted)", textDecoration: "none" }}
-            >
-              내 정보
+            <Link to="/me">
+              <button type="button" className="header-btn">
+                내 정보
+              </button>
             </Link>
             <button
               type="button"
+              className="header-btn header-btn-outline"
               onClick={handleLogout}
-              style={{ padding: "6px 12px" }}
             >
               로그아웃
             </button>
           </>
         ) : (
-          <Link
-            to="/login"
-            style={{ color: "var(--text-muted)", textDecoration: "none" }}
-          >
-            로그인
+          <Link to="/login">
+            <button type="button" className="header-btn">
+              로그인
+            </button>
           </Link>
         )}
         <ThemeSwitcher />

@@ -1,5 +1,5 @@
+import { useEffect, useRef, useState } from "react";
 import { getTheme, setTheme, THEMES } from "../utils/theme";
-import { useState } from "react";
 
 const labels = {
   light: "라이트",
@@ -9,29 +9,51 @@ const labels = {
 
 export default function ThemeSwitcher() {
   const [theme, setThemeState] = useState(getTheme());
+  const [open, setOpen] = useState(false);
+  const ref = useRef(null);
 
   const change = (t) => {
     setTheme(t);
     setThemeState(t);
+    setOpen(false);
   };
 
+  // 바깥 클릭 시 닫기
+  useEffect(() => {
+    const onClick = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) {
+        setOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, []);
+
   return (
-    <div style={{ display: "flex", gap: 8 }}>
-      {THEMES.map((t) => (
-        <button
-          key={t}
-          type="button"
-          onClick={() => change(t)}
-          style={{
-            opacity: theme === t ? 1 : 0.5,
-            background: theme === t ? "var(--primary)" : "var(--bg-card)",
-            color: theme === t ? "#fff" : "var(--text)",
-            border: "1px solid var(--border)",
-          }}
-        >
-          {labels[t]}
-        </button>
-      ))}
+    <div className="theme-switcher" ref={ref}>
+      <button
+        type="button"
+        className="header-btn header-btn-outline"
+        onClick={() => setOpen((v) => !v)}
+      >
+        화면 테마
+      </button>
+
+      {open && (
+        <ul className="theme-menu">
+          {THEMES.map((t) => (
+            <li key={t}>
+              <button
+                type="button"
+                className={`theme-menu-item ${theme === t ? "active" : ""}`}
+                onClick={() => change(t)}
+              >
+                {labels[t]}
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
