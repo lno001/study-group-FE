@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Navigate, BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -22,6 +22,7 @@ function App() {
           <Route path="/groups/:groupId" element={<GroupDetail />} />
           <Route path="/groups" element={<GroupList />} />
           <Route path="/me" element={<MyPage />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Layout>
     </BrowserRouter>
