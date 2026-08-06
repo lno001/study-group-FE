@@ -354,7 +354,7 @@ export default function GroupDetail() {
           >
             {showMembers
               ? "멤버 닫기"
-              : `멤버 보기 (${acceptedMembers.length})`}
+              : `멤버 목록 (${acceptedMembers.length})`}
           </button>
 
           {showMembers && (

@@ -57,7 +57,7 @@ export default function Home() {
               border: "1px solid var(--border)",
             }}
           >
-            그룹 보기
+            그룹 목록
           </button>
         </Link>
       </div>

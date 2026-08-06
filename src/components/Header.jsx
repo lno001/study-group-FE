@@ -37,7 +37,7 @@ export default function Header() {
           to="/groups"
           style={{ color: "var(--text-muted)", textDecoration: "none" }}
         >
-          그룹 보기
+          그룹 목록
         </Link>
         <Link
           to="/groups/create"
