@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getGroups } from "../api/group";
 import Toast from "../components/Toast";
+import { formatGroupDate } from "../utils/date";
+import "./GroupList.css";
 
 export default function GroupList() {
   const [groups, setGroups] = useState([]);
@@ -34,29 +36,30 @@ export default function GroupList() {
     fetchGroups();
   }, [page, region, status]);
 
+  const getPageNumbers = () => {
+    if (totalPages <= 0) return [];
+    const windowSize = 10;
+    let start = Math.max(0, page - Math.floor(windowSize / 2));
+    let end = start + windowSize;
+    if (end > totalPages) {
+      end = totalPages;
+      start = Math.max(0, end - windowSize);
+    }
+    return Array.from({ length: end - start }, (_, i) => start + i);
+  };
+
+  const pageNumbers = getPageNumbers();
+
   return (
     <div>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: 20,
-          flexWrap: "wrap",
-          gap: 12,
-        }}
-      >
-        <h2 style={{ margin: 0 }}>스터디 그룹</h2>
+      <div className="group-list-header">
+        <h2>스터디 그룹</h2>
         <Link to="/groups/create">
           <button type="button">그룹 생성</button>
         </Link>
       </div>
 
-      {/* 필터 */}
-      <div
-        className="card"
-        style={{ display: "flex", gap: 12, marginBottom: 20, flexWrap: "wrap" }}
-      >
+      <div className="card group-filters">
         <label>
           구역
           <select
@@ -65,7 +68,6 @@ export default function GroupList() {
               setPage(0);
               setRegion(e.target.value);
             }}
-            style={{ marginLeft: 8 }}
           >
             <option value="">전체</option>
             {Array.from({ length: 26 }, (_, i) => i + 1).map((n) => (
@@ -84,7 +86,6 @@ export default function GroupList() {
               setPage(0);
               setStatus(e.target.value);
             }}
-            style={{ marginLeft: 8 }}
           >
             <option value="">전체</option>
             <option value="모집중">모집중</option>
@@ -93,74 +94,64 @@ export default function GroupList() {
         </label>
       </div>
 
-      {loading && <p style={{ color: "var(--text-muted)" }}>불러오는 중...</p>}
+      {loading && <p className="muted">불러오는 중...</p>}
 
       {!loading && groups.length === 0 && (
-        <p style={{ color: "var(--text-muted)" }}>등록된 그룹이 없습니다.</p>
+        <p className="muted">등록된 그룹이 없습니다.</p>
       )}
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+      <div className="group-cards">
         {groups.map((g) => (
           <Link
             key={g.groupId}
             to={`/groups/${g.groupId}`}
-            style={{ textDecoration: "none", color: "inherit" }}
+            className="group-card-link"
           >
-            <div className="card" style={{ transition: "border-color 0.15s" }}>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  gap: 8,
-                }}
-              >
+            <div className="card group-card">
+              <div className="group-card-top">
                 <strong>{g.title}</strong>
-                <span style={{ color: "var(--primary)", fontSize: 14 }}>
-                  {g.status}
-                </span>
+                <span className="group-card-status">{g.status}</span>
               </div>
-              <p
-                style={{
-                  margin: "8px 0",
-                  color: "var(--text-muted)",
-                  fontSize: 14,
-                }}
-              >
+              <p className="group-card-meta">
                 {g.meetingType}
                 {g.region ? ` · ${g.region}` : ""}
                 {g.subject ? ` · ${g.subject}` : ""}
               </p>
-              <div style={{ fontSize: 13, color: "var(--text-muted)" }}>
+              <div className="group-card-sub">
                 {g.currentMembers}/{g.maxMembers}명 · 리더 {g.leaderNickname}
                 {g.isPublic === "N" ? " · 비공개" : ""}
+                {g.createdAt ? ` · ${formatGroupDate(g.createdAt)}` : ""}
               </div>
             </div>
           </Link>
         ))}
       </div>
 
-      {/* 페이징 */}
       {totalPages > 1 && (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            gap: 8,
-            marginTop: 24,
-          }}
-        >
+        <div className="pagination">
           <button
             type="button"
+            className="pagination-btn"
             disabled={page <= 0}
             onClick={() => setPage((p) => p - 1)}
           >
             이전
           </button>
-          <span style={{ lineHeight: "40px", color: "var(--text-muted)" }}>
-            {page + 1} / {totalPages}
-          </span>
+
+          {pageNumbers.map((n) => (
+            <button
+              key={n}
+              type="button"
+              className={`pagination-btn ${n === page ? "active" : ""}`}
+              onClick={() => setPage(n)}
+            >
+              {n + 1}
+            </button>
+          ))}
+
           <button
             type="button"
+            className="pagination-btn"
             disabled={page >= totalPages - 1}
             onClick={() => setPage((p) => p + 1)}
           >

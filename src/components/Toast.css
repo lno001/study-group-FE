@@ -1,0 +1,35 @@
+.toast {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    z-index: 9999;
+    min-width: 220px;
+    max-width: 360px;
+    padding: 14px 18px;
+    border-radius: 10px;
+    background: var(--bg-card);
+    color: var(--text);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow);
+    animation: toast-in 0.2s ease;
+}
+
+.toast-success {
+    border-left: 4px solid var(--primary);
+}
+
+.toast-error {
+    border-left: 4px solid var(--danger);
+}
+
+@keyframes toast-in {
+    from {
+        transform: translateY(12px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

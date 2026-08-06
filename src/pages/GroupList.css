@@ -1,0 +1,111 @@
+.group-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.group-list-header h2 {
+    margin: 0;
+}
+
+.group-list-header a {
+    text-decoration: none;
+}
+
+.group-filters {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.group-filters label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.group-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.group-card-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.group-card {
+    transition: border-color 0.15s;
+}
+
+.group-card:hover {
+    border-color: var(--primary);
+}
+
+.group-card-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.group-card-status {
+    color: var(--primary);
+    font-size: 14px;
+}
+
+.group-card-meta {
+    margin: 8px 0;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+.group-card-sub {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.muted {
+    color: var(--text-muted);
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+}
+
+.pagination-btn {
+    min-width: 40px;
+    padding: 8px 12px;
+    background: var(--bg-card);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    border-color: var(--primary);
+    color: var(--primary);
+    background: var(--bg-card);
+}
+
+.pagination-btn.active {
+    background: var(--primary);
+    color: var(--primary-text);
+    border-color: var(--primary);
+}
+
+.pagination-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}

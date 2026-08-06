@@ -1,23 +1,12 @@
-import Header from "./Header";
 import Footer from "./Footer";
+import Header from "./Header";
+import "./Layout.css";
 
 export default function Layout({ children }) {
   return (
-    <div
-      style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}
-    >
+    <div className="layout">
       <Header />
-      <main
-        style={{
-          flex: 1,
-          width: "100%",
-          maxWidth: 960,
-          margin: "0 auto",
-          padding: 24,
-        }}
-      >
-        {children}
-      </main>
+      <main className="layout-main">{children}</main>
       <Footer />
     </div>
   );

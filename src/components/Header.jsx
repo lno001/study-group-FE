@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import "./Header.css";
 import ThemeSwitcher from "./ThemeSwitcher";
 
 export default function Header() {
@@ -11,40 +12,12 @@ export default function Header() {
   };
 
   return (
-    <header
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        padding: "12px 24px",
-        borderBottom: "1px solid var(--border)",
-        background: "var(--bg-card)",
-        gap: 12,
-        flexWrap: "wrap",
-        position: relative;
-        overflow: visible; /* 메뉴가 잘리지 않게 */
-        z-index: 100;
-      }}
-    >
-      <Link
-        to="/"
-        style={{
-          color: "var(--text)",
-          textDecoration: "none",
-          fontWeight: 700,
-        }}
-      >
+    <header className="site-header">
+      <Link to="/" className="site-logo">
         KH 스터디
       </Link>
 
-      <nav
-        style={{
-          display: "flex",
-          gap: 8,
-          alignItems: "center",
-          flexWrap: "wrap",
-        }}
-      >
+      <nav className="site-nav">
         <Link to="/groups">
           <button type="button" className="header-btn">
             그룹 목록

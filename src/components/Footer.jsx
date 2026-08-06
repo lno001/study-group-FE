@@ -1,16 +1,8 @@
+import "./Footer.css";
+
 export default function Footer() {
   return (
-    <footer
-      style={{
-        marginTop: "auto",
-        padding: "24px",
-        borderTop: "1px solid var(--border)",
-        background: "var(--bg-card)",
-        color: "var(--text-muted)",
-        fontSize: 14,
-        textAlign: "center",
-      }}
-    >
+    <footer className="site-footer">
       <p style={{ margin: "0 0 8px" }}>KH 스터디 그룹 매칭</p>
       <p style={{ margin: "0 0 8px" }}>
         본 사이트는 수업 과제용 스터디 매칭 서비스입니다.

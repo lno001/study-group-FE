@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getMyInfo, updateMyInfo, withdraw } from "../api/user";
 import Toast from "../components/Toast";
+import "./MyPage.css";
 
 function PrivacyToggle({ value, onChange }) {
   const toggle = () => {

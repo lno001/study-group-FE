@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { getGroup, deleteGroup } from "../api/group";
+import { deleteGroup, getGroup } from "../api/group";
 import {
   applyMember,
-  getMembers,
   decideMember,
+  getMembers,
+  getMyMemberStatus,
   kickMember,
   leaveGroup,
-  getMyMemberStatus,
 } from "../api/member";
-import { getUserIdFromToken } from "../utils/auth";
 import Toast from "../components/Toast";
+import { getUserIdFromToken } from "../utils/auth";
+import "./GroupDetail.css";
 
 export default function GroupDetail() {
   const { groupId } = useParams();

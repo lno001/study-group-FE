@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { getTheme, setTheme, THEMES } from "../utils/theme";
+import "./ThemeSwitcher.css";
 
 const labels = {
   light: "라이트",
